@@ -11,6 +11,7 @@ speed = 5;
 
 count = countWin = -1;
 level = 0;
+score = score2 = 0;
 Xstart = Xend = Ystart = Yend = -1;
 dxBall = dyBall = 0;
 
@@ -39,6 +40,7 @@ class game {
 
     setUp(str) {
         A = [];
+        score2 = 200;
         this.setCookie("level", level, 7);
         count = countWin = -1;
         let s = str.split("|");
@@ -63,6 +65,7 @@ class game {
         XX = size / 2;
         YY = (game_H - size * M) / 2;
     }
+    
     checkWin() {
         for (let i = 0; i < M; i++)
             for (let j = 0; j < N; j++)
@@ -73,17 +76,27 @@ class game {
 
     listenTouch() {
         document.addEventListener("touchmove", evt => {
-            // Yend = evt.touches[0].pageY;
-            // Xend = evt.touches[0].pageX - (document.documentElement.clientWidth - game_W) / 2;
+            Yend = evt.touches[0].pageY;
+            Xend = evt.touches[0].pageX - (document.documentElement.clientWidth - game_W) / 2;
         })
 
         document.addEventListener("touchstart", evt => {
-            // Ystart = evt.touches[0].pageY;
-            // Xstart = evt.touches[0].pageX - (document.documentElement.clientWidth - game_W) / 2;
+            Ystart = evt.touches[0].pageY;
+            Xstart = evt.touches[0].pageX - (document.documentElement.clientWidth - game_W) / 2;
         })
 
         document.addEventListener("touchend", evt => { 
-            
+            if (Math.abs(Xstart - Xend) > Math.abs(Ystart - Yend)) {
+                if (Xstart > Xend)
+                    this.moveBall(0, -1);
+                else 
+                    this.moveBall(0, 1);
+            } else {
+                if (Ystart > Yend)
+                    this.moveBall(-1, 0);
+                else 
+                    this.moveBall(1, 0);
+            }
         })
     }
 
@@ -129,26 +142,40 @@ class game {
         yBall += L * dy;
         dxBall = - Math.floor(L * dx * size);
         dyBall = - Math.floor(L * dy * size);
+
+        if (L > 0)
+            score2--;
     }
 
     listenMouse() {
         document.addEventListener("mousedown", evt => {
-            // var x = evt.offsetX == undefined ? evt.layerX : evt.offsetX;
-            // var y = evt.offsetY == undefined ? evt.layerY : evt.offsetY;
-            // if (x > game_W -  1.5 * this.getWidth () && y < 1.3 * this.getWidth()) {
-            //     this.setUp(data[level]);
-            // }
-            // console.log(x, ' ', y);
+            Xstart = evt.offsetX == undefined ? evt.layerX : evt.offsetX;
+            Ystart = evt.offsetY == undefined ? evt.layerY : evt.offsetY;
         })
 
         document.addEventListener("mousemove", evt => {
-            var x = evt.offsetX == undefined ? evt.layerX : evt.offsetX;
-            var y = evt.offsetY == undefined ? evt.layerY : evt.offsetY;
+            if (Xstart == -1)
+                return;
+            Xend = evt.offsetX == undefined ? evt.layerX : evt.offsetX;
+            Yend = evt.offsetY == undefined ? evt.layerY : evt.offsetY;
+            if (Math.abs(Xstart - Xend) + Math.abs(Ystart - Yend) <= size / 2)
+                return;
+            if (Math.abs(Xstart - Xend) > Math.abs(Ystart - Yend)) {
+                if (Xstart > Xend)
+                    this.moveBall(0, -1);
+                else 
+                    this.moveBall(0, 1);
+            } else {
+                if (Ystart > Yend)
+                    this.moveBall(-1, 0);
+                else 
+                    this.moveBall(1, 0);
+            }
+            Xstart = Ystart = Xend = Yend = -1;
         })
 
         document.addEventListener("mouseup", evt => {
-            var x = evt.offsetX == undefined ? evt.layerX : evt.offsetX;
-            var y = evt.offsetY == undefined ? evt.layerY : evt.offsetY;
+
         })
     }
 
@@ -169,6 +196,7 @@ class game {
         }
 
         if (this.checkWin() && countWin == count) {
+            score += score2;
             if (level == data.length - 1)
                 level = -1;
             this.setUp(data[++level]);
@@ -199,7 +227,7 @@ class game {
     drawScore() {
         this.context.font = this.getSizeSquar() / 1.5 + 'px Arial Black';
         this.context.fillStyle = "#FF00CC";
-        this.context.fillText("Level: " + (Math.floor(level + 1)) + " / " + data.length, this.getSizeSquar(), this.getSizeSquar());
+        this.context.fillText("Level: " + (Math.floor(level + 1)) + " / " + data.length + "     Score: " + score + " + " + score2, this.getSizeSquar(), this.getSizeSquar());
     }
 
     drawBall() {
