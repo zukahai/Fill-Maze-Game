@@ -6,6 +6,7 @@ A = [];
 im= new Image();
 im.src = "images/ball.png";
 xBall = yBall = 0;
+speed = 5;
 
 count = countWin = -1;
 level = 0;
@@ -55,9 +56,9 @@ class game {
                 
             A[i] = temp;
         }
-        console.log(A);
 
         size = game_W / (N + 1);
+        speed = Math.min(M, N) * size / 10;
         XX = size / 2;
         YY = (game_H - size * M) / 2;
     }
@@ -116,8 +117,9 @@ class game {
     }
 
     moveBall(dx, dy) {
+        if (dxBall + dyBall != 0)
+            return;
         let L = 1;
-        console.log(xBall, ' ', yBall);
         while (this.isPoint(xBall + L * dx, yBall + L * dy) && A[xBall + L * dx][yBall + L * dy] % 2 == 0)
             L++;
         L--;
@@ -125,6 +127,8 @@ class game {
         console.log(L);
         xBall += L * dx;
         yBall += L * dy;
+        dxBall = - Math.floor(L * dx * size);
+        dyBall = - Math.floor(L * dy * size);
     }
 
     listenMouse() {
@@ -200,6 +204,18 @@ class game {
 
     drawBall() {
         this.context.drawImage(im, XX + yBall * size + dyBall, YY + xBall * size + dxBall, size ,size);
+        if (Math.abs(dxBall) < speed)
+            dxBall = 0;
+        if (Math.abs(dyBall) < speed)
+            dyBall = 0;
+        if (dxBall < 0)
+            dxBall += speed;
+        if (dxBall > 0)
+            dxBall -= speed;
+        if (dyBall < 0)
+            dyBall += speed;
+        if (dyBall > 0)
+            dyBall -= speed;
     }
 
     drawMatrix(){
