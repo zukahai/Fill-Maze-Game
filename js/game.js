@@ -45,8 +45,11 @@ class game {
         this.canvas = document.createElement("canvas");
         this.context = this.canvas.getContext("2d");
         document.body.appendChild(this.canvas);
-        if (this.getCookie("level") != "")
-            level = Math.floor(this.getCookie("level"));
+        if (this.getCookie("levelMaze") != "") {
+            level = Math.floor(this.getCookie("levelMaze"));
+            score = Math.floor(this.getCookie("scoreMaze"));
+        }
+            
 
         this.render();
         this.loop();
@@ -60,7 +63,8 @@ class game {
     setUp(str) {
         A = [];
         score2 = 100;
-        this.setCookie("level", level, 7);
+        this.setCookie("levelMaze", level, 7);
+        this.setCookie("scoreMaze", score, 7);
         count = countWin = -1;
         let s = str.split("|");
         M = Math.floor(s[0]);
