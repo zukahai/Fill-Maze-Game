@@ -222,7 +222,7 @@ class game {
 
         if (this.checkWin() && countWin == count) {
             score += score2;
-            if (level == data.length - 1)
+            if (level >= data.length - 1)
                 level = -1;
             this.setUp(data[++level]);
         }
