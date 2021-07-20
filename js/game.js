@@ -1,6 +1,6 @@
 game_W = 0, game_H = 0;
 c = 0;
-data = ["2|2|2030"];
+data = ["2|2|0030"];
 M = N = size = XX = YY = xPanda = yPanda = -1;
 A = [];
 im= new Image();
@@ -10,6 +10,7 @@ xBall = yBall = 0;
 count = countWin = -1;
 level = 0;
 Xstart = Xend = Ystart = Yend = -1;
+dxBall = dyBall = 0;
 
 class game {
     constructor() {
@@ -90,24 +91,40 @@ class game {
                 case 37:
                 case 65:
                     // console.log("Left");
+                    this.moveBall(0, -1);
                     break;
                 
                 case 38:
                 case 87:
                     // console.log("Top");
+                    this.moveBall(-1, 0);
                     break;
 
                 case 39:
                 case 68:
                     // console.log("Right");
+                    this.moveBall(0, 1);
                     break;
 
                 case 40:
                 case 83:
                     // console.log("Bottom");
+                    this.moveBall(1, 0);
                     break;
             }
         })
+    }
+
+    moveBall(dx, dy) {
+        let L = 1;
+        console.log(xBall, ' ', yBall);
+        while (this.isPoint(xBall + L * dx, yBall + L * dy) && A[xBall + L * dx][yBall + L * dy] % 2 == 0)
+            L++;
+        L--;
+            
+        console.log(L);
+        xBall += L * dx;
+        yBall += L * dy;
     }
 
     listenMouse() {
@@ -176,13 +193,13 @@ class game {
     }
 
     drawScore() {
-        this.context.font = this.getWidth() / 1.5 + 'px Arial Black';
+        this.context.font = this.getSizeSquar() / 1.5 + 'px Arial Black';
         this.context.fillStyle = "#FF00CC";
-        this.context.fillText("Level: " + (Math.floor(level + 1)) + " / " + data.length, this.getWidth(), this.getWidth());
+        this.context.fillText("Level: " + (Math.floor(level + 1)) + " / " + data.length, this.getSizeSquar(), this.getSizeSquar());
     }
 
     drawBall() {
-        this.context.drawImage(im, XX + yBall * size, YY + xBall * size, size ,size);
+        this.context.drawImage(im, XX + yBall * size + dyBall, YY + xBall * size + dxBall, size ,size);
     }
 
     drawMatrix(){
@@ -202,7 +219,7 @@ class game {
         this.context.fillRect(0 , 0, game_W, game_H); 
     }
 
-    getWidth() {
+    getSizeSquar() {
         var area = game_W * game_H;
         return Math.sqrt(area / 300);
     }
