@@ -1,6 +1,7 @@
 game_W = 0, game_H = 0;
 c = 0;
-data = ["2|2|0030"];
+data = ["2|2|0030",
+"2|2|0030"];
 M = N = size = XX = YY = xPanda = yPanda = -1;
 A = [];
 im= new Image();
@@ -37,7 +38,7 @@ class game {
     }
 
     setUp(str) {
-        console.log(A);
+        A = [];
         this.setCookie("level", level, 7);
         count = countWin = -1;
         let s = str.split("|");
@@ -53,9 +54,9 @@ class game {
                     temp[j] = 2;
                 }
             }
-                
             A[i] = temp;
         }
+        console.log(A);
 
         size = game_W / (N + 1);
         speed = Math.min(M, N) * size / 10;
@@ -124,7 +125,6 @@ class game {
             L++;
         L--;
             
-        console.log(L);
         xBall += L * dx;
         yBall += L * dy;
         dxBall = - Math.floor(L * dx * size);
@@ -169,7 +169,7 @@ class game {
         }
 
         if (this.checkWin() && countWin == count) {
-            if (level == data.length)
+            if (level == data.length - 1)
                 level = -1;
             this.setUp(data[++level]);
         }
@@ -216,6 +216,7 @@ class game {
             dyBall += speed;
         if (dyBall > 0)
             dyBall -= speed;
+        A[Math.floor((xBall * size + dxBall) / size)][Math.floor((yBall * size + dyBall) / size)] = 2;
     }
 
     drawMatrix(){
