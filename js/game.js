@@ -1,7 +1,7 @@
 game_W = 0, game_H = 0;
 c = 0;
 data = ["2|2|0030",
-"2|2|0030"];
+"5|5|0000001110001101110030001"];
 M = N = size = XX = YY = xPanda = yPanda = -1;
 A = [];
 im= new Image();
@@ -40,7 +40,7 @@ class game {
 
     setUp(str) {
         A = [];
-        score2 = 200;
+        score2 = 100;
         this.setCookie("level", level, 7);
         count = countWin = -1;
         let s = str.split("|");
@@ -145,6 +145,8 @@ class game {
 
         if (L > 0)
             score2--;
+        if (score2 < 20)
+            score2 = 20;
     }
 
     listenMouse() {
@@ -249,13 +251,14 @@ class game {
 
     drawMatrix(){
         for (let i = 0; i < M; i++) 
-            for (let j = 0; j < N; j++) {
-                if (A[i][j] == 0)
-                    this.context.fillStyle = "#C0C0C0";
-                else if (A[i][j] == 2)
-                    this.context.fillStyle = "#6699FF";
-                this.context.fillRect(XX + j * size, YY + i * size, size + 1, size + 1);
-            }
+            for (let j = 0; j < N; j++)
+                if (A[i][j] != 1) {
+                    if (A[i][j] == 0)
+                        this.context.fillStyle = "#C0C0C0";
+                    else if (A[i][j] == 2)
+                        this.context.fillStyle = "#6699FF";
+                    this.context.fillRect(XX + j * size, YY + i * size, size + 1, size + 1);
+                }
     }
 
     clearScreen() {
