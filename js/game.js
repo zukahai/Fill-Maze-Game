@@ -1,11 +1,11 @@
 game_W = 0, game_H = 0;
 c = 0;
-data = ["2|2|0000"];
+data = ["2|2|2030"];
 M = N = size = XX = YY = xPanda = yPanda = -1;
 A = [];
 im= new Image();
 im.src = "images/ball.png";
-
+xBall = yBall = 0;
 
 count = countWin = -1;
 level = 0;
@@ -45,9 +45,10 @@ class game {
             let temp = [];
             for (let j = 0; j < N; j++) {
                 temp[j] = s[2][i * N + j];
-                if (temp[j] == 5) {
-                    xPanda = i;
-                    yPanda = j;
+                if (temp[j] == 3) {
+                    xBall = i;
+                    yBall = j;
+                    temp[j] = 2;
                 }
             }
                 
@@ -171,6 +172,7 @@ class game {
         this.clearScreen();
         this.drawMatrix();
         this.drawScore();
+        this.drawBall();
     }
 
     drawScore() {
@@ -179,11 +181,17 @@ class game {
         this.context.fillText("Level: " + (Math.floor(level + 1)) + " / " + data.length, this.getWidth(), this.getWidth());
     }
 
+    drawBall() {
+        this.context.drawImage(im, XX + yBall * size, YY + xBall * size, size ,size);
+    }
+
     drawMatrix(){
         for (let i = 0; i < M; i++) 
             for (let j = 0; j < N; j++) {
                 if (A[i][j] == 0)
                     this.context.fillStyle = "#C0C0C0";
+                else if (A[i][j] == 2)
+                    this.context.fillStyle = "#6699FF";
                 this.context.fillRect(XX + j * size, YY + i * size, size + 1, size + 1);
             }
     }
