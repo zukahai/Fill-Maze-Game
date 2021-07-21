@@ -64,7 +64,7 @@ speed = 5;
 
 count = countWin = -1;
 level = 0;
-level = data.length - 1;
+// level = data.length - 1;
 score = score2 = 0;
 Xstart = Xend = Ystart = Yend = -1;
 dxBall = dyBall = 0;
@@ -215,7 +215,7 @@ class game {
         dyBall = - Math.floor(L * dy * size);
 
         if (L > 0)
-            score2--;
+            score2 -= (1 + Math.floor(level / 5));
         if (score2 < 20)
             score2 = 20;
         Xstart = Ystart = Xend = Yend = -1;
