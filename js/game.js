@@ -34,8 +34,8 @@ xBall = yBall = 0;
 speed = 5;
 
 count = countWin = -1;
-// level = 0;
-level = data.length - 1;
+level = 0;
+// level = data.length - 1;
 score = score2 = 0;
 Xstart = Xend = Ystart = Yend = -1;
 dxBall = dyBall = 0;
