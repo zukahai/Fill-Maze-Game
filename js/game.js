@@ -278,7 +278,7 @@ class game {
             dyBall += speed;
         if (dyBall > 0)
             dyBall -= speed;
-        A[Math.floor((xBall * size + dxBall) / size)][Math.floor((yBall * size + dyBall) / size)] = 2;
+        A[Math.floor((xBall * size + dxBall + size / 2) / size)][Math.floor((yBall * size + dyBall + size / 2) / size)] = 2;
     }
 
     drawMatrix(){
