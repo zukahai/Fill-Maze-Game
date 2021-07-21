@@ -29,8 +29,10 @@ data = ["2|2|0030",
 "9|9|000010000001001010100001010000000000000000001000100000101111010300000010101111110"];
 M = N = size = XX = YY = xPanda = yPanda = -1;
 A = [];
-im= new Image();
-im.src = "images/ball.png";
+im = new Image();
+rd = -1;
+cl = ["#99FF66", "#FFFF66", "#99FFFF", "#6699FF", "#FF9999", "#CC9966", "#CC99CC", "#444444", "#FF99FF"];
+color = 0;
 xBall = yBall = 0;
 speed = 5;
 
@@ -67,7 +69,20 @@ class game {
         
     }
 
+    initColor(N) {
+        let k = -1;
+        do {
+            k = (Math.floor(Math.random() * 9999999)) % cl.length;
+        }   while (k == N);
+        return k;
+    }
+
     setUp(str) {
+        rd = this.initColor(rd);
+        im = new Image();
+        im.src = "images/ball/" + rd + ".png";
+        color = cl[rd];
+        console.log(rd);
         A = [];
         score2 = 100;
         this.setCookie("levelMaze", level, 7);
@@ -168,8 +183,6 @@ class game {
             L++;
         L--;
 
-        console.log(L);
-            
         xBall += L * dx;
         yBall += L * dy;
         dxBall = - Math.floor(L * dx * size);
@@ -289,7 +302,7 @@ class game {
                     if (A[i][j] == 0)
                         this.context.fillStyle = "#C0C0C0";
                     else if (A[i][j] == 2)
-                        this.context.fillStyle = "#6699FF";
+                        this.context.fillStyle = color;
                     this.context.fillRect(XX + j * size, YY + i * size, size + 1, size + 1);
                 }
     }
